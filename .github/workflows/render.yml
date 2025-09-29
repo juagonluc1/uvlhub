@@ -10,8 +10,25 @@ on:
 
 jobs:
 
+  testing:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql: 5.7
+        env:
+          MYSQL_ROOT_PASSWORD: uvlhub_root_password
+          MYSQL_DATABASE: uvlhubdb_test
+          MYSQL_USER: uvlhub_user
+          MYSQL_PASSWORD: uvlhub_password
+        ports:
+          - 3306:3306
+        options: --helat-cmd="mysqladmin ping" --health-interval=10s --healt-timeout=5s --health-retries=3
+
   deploy:
     name: Deploy to Render
+    needs: testing
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo

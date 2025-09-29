@@ -27,6 +27,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Check for outdated dependencies
+      run: |
+        pip list --outdated
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -37,6 +41,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Security audited with pip-audit
+      run: |
+        pip install pip-audit
+        pip-audit || true
+        
     - name: Upload coverage to Codacy
       run: |
         pip install codacy-coverage
